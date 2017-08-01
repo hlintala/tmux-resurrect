@@ -12,4 +12,4 @@ expected:
     set -g @resurrect-dir '/path/$MY_VAR/$(some_executable)'
 
 Only the following variables and special chars are allowed:
-`$HOME`, `$HOSTNAME`, and `~`.
+`$HOME`, `$HOSTNAME`, `~`, and $TMUX_SOCKET_NAME.
