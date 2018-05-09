@@ -265,6 +265,13 @@ restore_all_panes() {
 	fi
 }
 
+restore_linked_windows() {
+	\grep '^linked_window' $(last_resurrect_file) |
+		while IFS=$d read line_type session window_index original_session original_window_index; do
+			tmux link-window -s "${original_session}:${original_window_index}" -t "${session}:${window_index}"
+		done
+}
+
 restore_pane_layout_for_each_window() {
 	\grep '^window' $(last_resurrect_file) |
 		while IFS=$d read line_type session_name window_number window_active window_flags window_layout; do
@@ -348,6 +355,7 @@ main() {
 		start_spinner "Restoring..." "Tmux restore complete!"
 		execute_hook "pre-restore-all"
 		restore_all_panes
+		restore_linked_windows
 		restore_pane_layout_for_each_window >/dev/null 2>&1
 		execute_hook "pre-restore-history"
 		if save_shell_history_option_on; then
